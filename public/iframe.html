@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-200 h-screen flex items-center justify-center">
+    <div class="w-full max-w-xs">
+        <form id="chatForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <div class="mb-4">
+                <label for="userInput" class="block text-gray-700 text-sm font-bold mb-2">
+                    Enter your prompt:
+                </label>
+                <input type="text" id="userInput" name="userInput"
+                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="Type something...">
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Send
+                </button>
+            </div>
+        </form>
+        <div id="chatResponse" class="mt-4 p-4 bg-gray-100 rounded shadow">
+            <!-- Response will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        apiURL = "http://127.0.0.1:5000/process_prompt"
+        document.getElementById('chatForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const userInput = document.getElementById('userInput').value;
+            try {
+                const response = await fetch(apiURL, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ prompt: userInput })
+                });
+                const data = await response.json();
+                console.log(data)
+                document.getElementById('chatResponse').textContent = data.response; // Assuming 'answer' is the key in the response
+            } catch (error) {
+                document.getElementById('chatResponse').textContent = 'Error: ' + error;
+            }
+        });
+    </script>
+</body>
+</html>
