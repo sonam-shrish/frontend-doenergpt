@@ -8,3 +8,5 @@ export function middleware(request) {
 
     return response;
 }
+
+export default middleware
