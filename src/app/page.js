@@ -1,7 +1,7 @@
 'use client'
 import Chat from "@/components/Chat/Chat";
 // import { Footer } from "@/components/Layout/Footer";
-// import { Navbar } from "@/components/Layout/Navbar";
+import Navbar from "@/components/Layout/Navbar";
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 
@@ -9,7 +9,10 @@ export default function Page() {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [showChatInterface, setShowChatInterface] = useState(false);
 
+
+  const toggleChat = () => setShowChatInterface(!showChatInterface);
 
   const messagesEndRef = useRef(null);
 
@@ -23,7 +26,7 @@ export default function Page() {
     setMessages(updatedMessages);
     setLoading(true);
 
-    const response = await fetch("http://127.0.0.1:5000/process_prompt", {
+    const response = await fetch("https://backend-doenergpt-1d4c49c2d73e.herokuapp.com/process_prompt", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -119,8 +122,22 @@ export default function Page() {
         />
       </Head>
 
-      <div className="flex flex-col h-screen">
-        {/* <Navbar /> */}
+      
+
+        {
+          !showChatInterface && <>
+          <button onClick={toggleChat} style={{ position: 'fixed', bottom: 50, right: 20}}>
+            {/* You can use an image or an icon here */}
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-16 h-16 text-blue-500" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+            </svg>
+          </button>
+      </>}
+
+
+      {showChatInterface && <>
+        <div className="flex flex-col h-screen">
+        <Navbar toggleChat={toggleChat} />
 
         <div className="flex-1 overflow-auto sm:px-10 pb-4 sm:pb-10">
           <div className="max-w-[800px] mx-auto mt-4 sm:mt-12">
@@ -135,6 +152,10 @@ export default function Page() {
         </div>
         {/* <Footer /> */}
       </div>
+      <div>
+      </div>
+    </>}
+
     </>
   );
 }
