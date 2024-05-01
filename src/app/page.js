@@ -136,7 +136,7 @@ export default function Page() {
 
 
       {showChatInterface && <>
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-screen" style={{backgroundColor: "#f5f5f5"}}>
         <Navbar toggleChat={toggleChat} />
 
         <div className="flex-1 overflow-auto sm:px-10 pb-4 sm:pb-10">
